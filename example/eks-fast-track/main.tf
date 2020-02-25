@@ -105,20 +105,20 @@ module "eks-compute" {
   key_name = var.key_name
   # AWS EC2(Bastion)에서 terraform을 실행하기 위한 설정.
   # map_users 설정에 IAM 사용자 정보를 설정하고 IAM 사용자 권한으로 terraform 실행하는 경우는 필요 없음.
-  map_roles = [
-    {
-      # AWS IAM Role, 사전에 생성되어 있어야 함. AdministratorAccess 정책이 맵핑되어 있어야 함.
-      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/SEOUL-SRE-K8S-BASTION"
-      # 쿠버네티스 RBAC 사용자이름, 기본값이므로 그냥 사용.
-      username = "iam_role_bastion"
-      # 쿠버네티스 RBAC 그룹, 기본값이므로 그냥 사용.
-      group    = "system:masters"
-    },
-  ]
-  map_users = var.map_users
-  worker_sg_id = module.eks-sg-node.sg_id
-  vpc_id  = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnet_ids
+  map_roles = []
+#    {
+#      # AWS IAM Role, 사전에 생성되어 있어야 함. AdministratorAccess 정책이 맵핑되어 있어야 함.
+#      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/SEOUL-SRE-K8S-BASTION"
+#      # 쿠버네티스 RBAC 사용자이름, 기본값이므로 그냥 사용.
+#      username = "iam_role_bastion"
+#      # 쿠버네티스 RBAC 그룹, 기본값이므로 그냥 사용.
+#      group    = "system:masters"
+#    },
+#  ]
+  map_users = "${var.map_users}"
+  worker_sg_id = "${module.eks-sg-node.sg_id}"
+  vpc_id  = "${module.vpc.vpc_id}"
+  subnet_ids = "${module.vpc.private_subnet_ids}"
 }
 output "config" {
     value = module.eks-compute.config
